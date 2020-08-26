@@ -1,14 +1,14 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import _ from "lodash";
+
 import Pagination from "./common/Pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/ListGroup";
 import MoviesTable from "./MoviesTable";
-import _ from "lodash";
-
 import { getMovies, deleteMovie } from "../services/movieService";
 import { getGenres } from "../services/genreService";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
 class Movies extends Component {
   state = {
@@ -85,6 +85,7 @@ class Movies extends Component {
   render() {
     const { length: count } = this.state.movies;
     const { pageSize, currentPage, sortColumn } = this.state;
+    const { user } = this.props;
 
     if (count === 0) return <p>There are no movies in the database</p>;
 
@@ -100,9 +101,11 @@ class Movies extends Component {
           />
         </div>
         <div className="col-9">
-          <Link to="/movies/new" className="btn btn-primary mb-3">
-            New Movie
-          </Link>
+          {user && (
+            <Link to="/movies/new" className="btn btn-primary mb-3">
+              New Movie
+            </Link>
+          )}
           <p>Showing {totalCount} movies in the database</p>
           <MoviesTable
             movies={movies}
